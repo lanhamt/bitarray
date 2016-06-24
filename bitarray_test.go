@@ -1,9 +1,26 @@
+/*
+ * File: bitarray_test
+ * ------------------------------
+ * Automated unit testing for bitarray. 
+ *
+ * Note: does not provide coverage for 
+ * invalid position for set or get, and 
+ * invalid value for set since testing 
+ * does not support panic. 
+ */
+
 package bitarray
 
 import (
     "testing"
 )
 
+/*
+ * Test: TestBitArrayInit
+ * ------------------------------
+ * Tests that all bits are initialized to 
+ * 0 in array. 
+ */
 func TestBitArrayInit(t *testing.T) {
     ba := BitArray(28)
     if ba.GetBit(0) {
@@ -17,6 +34,14 @@ func TestBitArrayInit(t *testing.T) {
     }
 }
 
+/*
+ * Test: TestBitArrayGetAndSet
+ * ------------------------------
+ * Tests get and set functions for bit 
+ * array on arrays of different sizes 
+ * including one aligned to whole number of 
+ * bytes and another not. 
+ */
 func TestBitArrayGetAndSet(t *testing.T) {
     ba1 := BitArray(128)
     ba2 := BitArray(65537)
