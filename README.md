@@ -1,5 +1,7 @@
 #bitarray
-Implementation of bitarray data structure for go.
+Implementation of thread-safe bitarray data structure for go.
+Uses read/write locking to allow multiple concurrent reads while
+complete block for writes. 
 
 ##Usage
 Import by either adding to gopath for libraries or importing 
@@ -24,4 +26,7 @@ To test with included unit test, descend into directory and
 execute `go test`.
 
 Note: test framework does not test out of bounds errors since 
-golang's testing does not accomodate `panic`. 
+golang's testing does not accomodate `panic`.
+
+##Contact
+tlanham@cs.stanford.edu

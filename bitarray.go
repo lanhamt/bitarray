@@ -1,4 +1,16 @@
+/*
+ * File: bitarray.go
+ * ------------------------------
+ * Package to implement bitarray data 
+ * structure with set and get functionality
+ * and thread safety. 
+ */
+
 package bitarray
+
+import (
+    "sync"
+)
 
 // well-known type implementation for byte
 const bitsPerByte = 8
@@ -8,11 +20,13 @@ const bitsPerByte = 8
  * ------------------------------
  * Struct for bit array. numBits keeps track of 
  * size of array. a is array of bytes used for 
- * internal storage. 
+ * internal storage. Uses Read/Write mutex to 
+ * protect array of bytes for thread safety. 
  */
 type BArray struct {
     numBits uint32
     a[]     byte
+    sync.RWMutex
 }
 
 /*
@@ -55,11 +69,14 @@ func (arr *BArray) SetBit(position uint32, value byte) {
 
     if value == 1 {
         mask := byte(0x1 << nBit)
+        arr.Lock()
         arr.a[nByte] |= mask
     } else {
         mask := ^byte(0x1 << nBit)
+        arr.Lock()
         arr.a[nByte] &= mask
     }
+    arr.Unlock()
 }
 
 /*
@@ -78,7 +95,10 @@ func (arr *BArray) GetBit(position uint32) bool {
     nByte := position / bitsPerByte
     nBit := position % bitsPerByte
 
-    return (arr.a[nByte] & (0x1 << nBit)) != 0
+    arr.RLock()
+    bitValue := (arr.a[nByte] & (0x1 << nBit)) != 0
+    arr.RUnlock()
+    return bitValue
 }
 
 /*
